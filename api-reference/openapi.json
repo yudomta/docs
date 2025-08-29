@@ -1,217 +1,783 @@
 {
-  "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
-    "version": "1.0.0"
+    "_postman_id": "cd9c1891-0758-4811-a7bb-6e35d2aed066",
+    "name": "ClaimMind CL-Service \u2013 External Integration",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection untuk integrator eksternal.\nGunakan variables: \n- baseUrl (contoh: https://api.example.com)\n- token (Bearer JWT/OAuth2)\n"
   },
-  "servers": [
+  "item": [
     {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
-  "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
-                }
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Whoami",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
               }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
-      "post": {
-        "description": "Information about a new plant added to the store",
-        "requestBody": {
-          "description": "Plant added to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
-          },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
-          }
-        }
-      },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
             ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
+            "url": {
+              "raw": "{{baseUrl}}/v1/auth/whoami",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "auth",
+                "whoami"
+              ]
             }
           }
-        ]
-      },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Claims",
+      "item": [
+        {
+          "name": "Create Claim",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/claims/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "claims",
+                "create"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claim_id\": \"b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa\",\n  \"claim_code\": \"SEP-123456\"\n}"
+            },
+            "description": "Daftarkan klaim baru. Simpan claim_id ini untuk langkah berikutnya."
+          }
+        },
+        {
+          "name": "Get Claim by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/claims/get/b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "claims",
+                "get",
+                "b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Claims",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/claims/get-all",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "claims",
+                "get-all"
+              ],
+              "query": [
+                {
+                  "key": "tenant_id",
+                  "value": "f1f1f1f1-1111-2222-3333-444444444444"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Claim",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/claims/update/b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "claims",
+                "update",
+                "b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claim_code\": \"SEP-NEW-999\",\n  \"ocr_category\": \"medical_resume\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Commit Claim Detail",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/claims/internal/claim-details/commit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "claims",
+                "internal",
+                "claim-details",
+                "commit"
+              ],
+              "query": [
+                {
+                  "key": "claim_id",
+                  "value": "b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Rollback Claim Detail",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/claims/internal/claim-details/rollback",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "claims",
+                "internal",
+                "claim-details",
+                "rollback"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claim_id\": \"b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa\",\n  \"rollback_to_version\": 1,\n  \"reason\": \"rollback contoh\"\n}"
+            }
           }
         }
-      }
+      ]
     },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
-      }
+    {
+      "name": "Workflows / OCR",
+      "item": [
+        {
+          "name": "OCR PII \u2013 Trigger (single file)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/workflows/ocr/pii/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "workflows",
+                "ocr",
+                "pii",
+                "create"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claim_id\": \"b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa\",\n  \"claim_code\": \"SEP-123456\",\n  \"base64\": \"<BASE64_FILE>\"\n}"
+            }
+          }
+        },
+        {
+          "name": "OCR \u2013 Trigger (multi)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/workflows/ocr/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "workflows",
+                "ocr",
+                "create"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claim_id\": \"b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa\",\n  \"base64_list\": [\n    \"<B64_1>\",\n    \"<B64_2>\"\n  ],\n  \"filenames\": [\n    \"resume.pdf\",\n    \"lab.png\"\n  ],\n  \"raw_input\": \"optional notes\"\n}"
+            }
+          }
+        },
+        {
+          "name": "OCR \u2013 Worker Push Result",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/workflows/ocr/fetch-result",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "workflows",
+                "ocr",
+                "fetch-result"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workflow_id\": \"ocr-456\",\n  \"result\": \"# Full text markdown ...\",\n  \"ocr_validation\": {\n    \"pages\": 12,\n    \"score\": 0.98\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "OCR \u2013 Result Latest (by claim)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/workflows/ocr/result-latest/b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "workflows",
+                "ocr",
+                "result-latest",
+                "b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa"
+              ]
+            }
+          }
+        },
+        {
+          "name": "OCR \u2013 Result (aggregate)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/workflows/ocr/result",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "workflows",
+                "ocr",
+                "result"
+              ],
+              "query": [
+                {
+                  "key": "claim_id",
+                  "value": "b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Workflows / ICD",
+      "item": [
+        {
+          "name": "ICD \u2013 Trigger",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/workflows/icd/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "workflows",
+                "icd",
+                "create"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claim_id\": \"b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa\",\n  \"ocr_result\": \"# extracted markdown or reference\"\n}"
+            }
+          }
+        },
+        {
+          "name": "ICD \u2013 Worker Push Result (full_json)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/workflows/icd/fetch-result",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "workflows",
+                "icd",
+                "fetch-result"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claim_id\": \"b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa\",\n  \"full_json\": {\n    \"groups\": [\n      {\n        \"icd10\": [\n          {\n            \"code\": \"I10\",\n            \"description\": \"Essential hypertension\"\n          }\n        ]\n      }\n    ]\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "ICD \u2013 Submit/Override (manual)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/workflows/icd/submit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "workflows",
+                "icd",
+                "submit"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claim_id\": \"b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa\",\n  \"patient_profile\": {\n    \"icd10_list\": [\n      {\n        \"code\": \"I10\",\n        \"description\": \"Essential hypertension\"\n      }\n    ],\n    \"icd9_list\": [],\n    \"ina_cbg\": \"\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "ICD \u2013 View Result (flat)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/workflows/icd/fetch-result/b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "workflows",
+                "icd",
+                "fetch-result",
+                "b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Workflows / CBG",
+      "item": [
+        {
+          "name": "CBG \u2013 Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/workflows/cbg/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "workflows",
+                "cbg",
+                "create"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claim_id\": \"b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa\",\n  \"icd_code\": {\n    \"icd10_list\": [\n      {\n        \"code\": \"I10\"\n      }\n    ]\n  },\n  \"ocr_result\": \"#\"\n}"
+            }
+          }
+        },
+        {
+          "name": "CBG \u2013 Push Result",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/workflows/cbg/fetch-result",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "workflows",
+                "cbg",
+                "fetch-result"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claim_id\": \"b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa\",\n  \"workflow_id\": \"cbg-789\",\n  \"cbg_code\": {\n    \"code\": \"X-1-10\"\n  },\n  \"full_json\": {\n    \"tariff\": 3500000\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "CBG \u2013 Latest Result",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/workflows/cbg/result/b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "workflows",
+                "cbg",
+                "result",
+                "b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Workflows / Validation",
+      "item": [
+        {
+          "name": "Validation \u2013 Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/workflows/validation/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "workflows",
+                "validation",
+                "create"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"input_data\": {\n    \"claim_id\": \"b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa\",\n    \"tenant_id\": \"f1f1f1f1-1111-2222-3333-444444444444\",\n    \"claim_markdown\": \"# resume ...\",\n    \"patient_profile\": {\n      \"icd10_list\": [\n        {\n          \"code\": \"I10\"\n        }\n      ],\n      \"icd9_list\": []\n    }\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Validation \u2013 Worker Push Result",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/workflows/validation/fetch-result",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "workflows",
+                "validation",
+                "fetch-result"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workflow_id\": \"val-321\",\n  \"status\": \"completed\",\n  \"validation_result\": {\n    \"prediction\": \"settled_full\",\n    \"confidence_score\": 0.87,\n    \"rules\": [\n      {\n        \"id\": \"R-01\",\n        \"passed\": true\n      }\n    ]\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Validation \u2013 Search Rules (helper)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/workflows/validation/rules",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "workflows",
+                "validation",
+                "rules"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenant_id\": \"f1f1f1f1-1111-2222-3333-444444444444\",\n  \"patient_profile\": {\n    \"icd10_list\": [\n      {\n        \"code\": \"I10\"\n      }\n    ],\n    \"icd9_list\": []\n  }\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Agent Memory",
+      "item": [
+        {
+          "name": "Agent Memory \u2013 Create Block",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/agent/agent/create-memory-block",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "agent",
+                "agent",
+                "create-memory-block"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claim_id\": \"b0b32c7d-9f2f-4c92-97da-1b9c0f5eaaaa\",\n  \"label\": \"Resume Medis V1\",\n  \"markdown_text\": \"## Anamnesis\\\\n...\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Utilities",
+      "item": [
+        {
+          "name": "Healthcheck",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/healthcheck",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "healthcheck"
+              ]
+            }
+          }
+        }
+      ]
     }
-  }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "token",
+      "value": "<PUT_YOUR_TOKEN_HERE>"
+    }
+  ]
 }
